@@ -24,7 +24,7 @@ Validação da entrega **VZS-142 – Cupom de desconto e frete grátis** (v2.3.0
 |---|---|---|---|---|
 | 31 (execução manual) | 26 | 5 | 8 de 11 | 4 (2 altos, 2 baixos) |
 
-Além dos casos de teste, foram feitas 9 sessões exploratórias. Seis foram manuais e três, com combinações repetitivas em massa na API, foram feitas com apoio de IA.
+Além dos casos de teste, foram feitas 9 sessões exploratórias. Seis foram manuais e três, com combinações repetitivas em massa na API, foram feitas com apoio de IA (ver [Uso de IA](#uso-de-ia)).
 
 | Bug | Descrição | Severidade |
 |---|---|---|
@@ -32,6 +32,25 @@ Além dos casos de teste, foram feitas 9 sessões exploratórias. Seis foram man
 | [BUG-02](docs/04-bugs.md#bug-02--api-aceita-mais-de-5-unidades-por-produto) | API aceita mais de 5 unidades por produto (CA10) | Alta |
 | [BUG-03](docs/04-bugs.md#bug-03--item-sem-produtoid-retorna-erro-inadequado) | Item sem `produtoId` retorna "Produto undefined não encontrado." | Baixa |
 | [BUG-04](docs/04-bugs.md#bug-04--checkout-aceita-nome-sem-letras-e-e-mail-com-pontos-consecutivos) | Checkout aceita nome sem letras e e-mail com pontos consecutivos | Baixa |
+
+## Uso de IA
+
+Usei IA como apoio em três frentes. Em todas elas o conteúdo gerado foi revisado e ajustado por mim.
+
+| Onde | Como a IA foi usada | Onde ver |
+|---|---|---|
+| Documentação | Geração e organização dos documentos: plano de teste, índice dos casos de teste e matriz de rastreabilidade, relatório de execução, padronização do report de bugs e este README. | [`docs/`](docs) e este README |
+| Testes com muitos passos | Execução das combinações repetitivas na API: produtos × quantidades × cupom, comparadas com o cálculo esperado em centavos, e dezenas de variações negativas (sessões EXP-01, EXP-05 e EXP-06). As chamadas foram feitas em sequência, uma por vez, para não gerar carga no ambiente compartilhado. | [Relatório, seção 5](docs/03-relatorio-de-execucao.md#5-testes-repetitivos-com-apoio-de-ia) |
+| Automação | Aperfeiçoamento dos scripts de teste em Playwright: organização em Page Objects, seletores, cálculo esperado em centavos, testes de bug com `test.fail()` e ajustes de configuração. | [`automation/`](automation) |
+
+O que foi feito manualmente, sem IA:
+
+- execução dos 31 casos de teste, pela interface e pela API no Postman;
+- identificação dos 4 bugs, que apareceram na execução manual;
+- sessões exploratórias EXP-02, EXP-03, EXP-04, EXP-07, EXP-08 e EXP-09;
+- prints das evidências, feitos na loja e no Postman.
+
+Os testes com apoio de IA não encontraram bugs novos. Eles confirmaram os 4 bugs da execução manual em mais combinações.
 
 ## Automação
 
