@@ -1,0 +1,246 @@
+{
+  "info": {
+    "_postman_id": "cd5940ad-1222-4474-b7e2-5d3aa3dfe571",
+    "name": "Verzel Store",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57221934"
+  },
+  "item": [
+    {
+      "name": "bugs",
+      "item": [
+        {
+          "name": "BUG-01 - Frete cobrado com subtotal R$ 200,00",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "   const body = pm.response.json();\n   pm.test(\"Status 200\", () => pm.response.to.have.status(200));\n   pm.test(\"Subtotal é 200\", () => pm.expect(body.subtotal).to.eql(200));\n   pm.test(\"CA06: frete grátis com subtotal = 200\", () => {\n       pm.expect(body.frete).to.eql(0);\n       pm.expect(body.freteGratis).to.be.true;\n   });\n   pm.test(\"Total = 200\", () => pm.expect(body.total).to.eql(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "   { \"itens\": [ { \"produtoId\": \"P005\", \"quantidade\": 2 } ] }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/carrinho/calcular",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "carrinho",
+                "calcular"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BUG-02a - Pedido confirmado com 6 unidades",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CA10: status 422\", () => pm.response.to.have.status(422));\r\npm.test(\"Código QUANTIDADE_MAXIMA_EXCEDIDA\", () => {\r\n    pm.expect(pm.response.json().erro?.codigo).to.eql(\"QUANTIDADE_MAXIMA_EXCEDIDA\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"cliente\": { \"nome\": \"Maria Silva\", \"email\": \"maria@exemplo.com\", \"cep\": \"01310-100\" },\r\n  \"itens\": [ { \"produtoId\": \"P005\", \"quantidade\": 6 } ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BUG-02b - Cálculo do carrinho com 6 unidades",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"CA10: status 422\", () => pm.response.to.have.status(422));\r\npm.test(\"Código QUANTIDADE_MAXIMA_EXCEDIDA\", () => {\r\n    pm.expect(pm.response.json().erro?.codigo).to.eql(\"QUANTIDADE_MAXIMA_EXCEDIDA\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"itens\": [ { \"produtoId\": \"P006\", \"quantidade\": 6 } ] }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/carrinho/calcular",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "carrinho",
+                "calcular"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BUG-03 - Item sem produtoId retorna \"Produto undefined\"",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const erro = pm.response.json().erro;\r\npm.test(\"Status 422\", () => pm.response.to.have.status(422));\r\npm.test(\"Código ITEM_INVALIDO\", () => pm.expect(erro.codigo).to.eql(\"ITEM_INVALIDO\"));\r\npm.test(\"Mensagem não expõe 'undefined'\", () => pm.expect(erro.mensagem).to.not.include(\"undefined\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"itens\": [ { \"quantidade\": 1 } ] }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/carrinho/calcular",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "carrinho",
+                "calcular"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BUG-04a - Pedido aceito com nome sem letras",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Nome sem letras é recusado (422)\", () => pm.response.to.have.status(422));\r\npm.test(\"Código DADOS_INVALIDOS\", () => {\r\n    pm.expect(pm.response.json().erro?.codigo).to.eql(\"DADOS_INVALIDOS\");\r\n});\r\npm.test(\"Erro aponta o campo cliente.nome\", () => {\r\n    const campos = pm.response.json().erro?.campos?.map(c => c.campo) || [];\r\n    pm.expect(campos).to.include(\"cliente.nome\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"cliente\": { \"nome\": \"12345 67890\", \"email\": \"maria@exemplo.com\", \"cep\": \"01310100\" },\r\n  \"itens\": [ { \"produtoId\": \"P001\", \"quantidade\": 1 } ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BUG-04b - Pedido aceito com e-mail malformado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"E-mail malformado é recusado (422)\", () => pm.response.to.have.status(422));\r\npm.test(\"Código DADOS_INVALIDOS\", () => {\r\n    pm.expect(pm.response.json().erro?.codigo).to.eql(\"DADOS_INVALIDOS\");\r\n});\r\npm.test(\"Erro aponta o campo cliente.email\", () => {\r\n    const campos = pm.response.json().erro?.campos?.map(c => c.campo) || [];\r\n    pm.expect(campos).to.include(\"cliente.email\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"cliente\": { \"nome\": \"Maria Silva\", \"email\": \"maria@exemplo..com\", \"cep\": \"01310100\" },\r\n  \"itens\": [ { \"produtoId\": \"P001\", \"quantidade\": 1 } ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "pedidos"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

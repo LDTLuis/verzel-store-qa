@@ -1,0 +1,17 @@
+node_modules/
+test-results/
+playwright-report/
+blob-report/
+.cache/
+.env
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Claude Code
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+
+# Material pessoal (fora do repositório)
+Resumo_Entrevista_VZS-142.pdf
