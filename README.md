@@ -33,6 +33,22 @@ Além dos casos de teste, foram feitas 9 sessões exploratórias. Seis foram man
 | [BUG-03](docs/04-bugs.md#bug-03--item-sem-produtoid-retorna-erro-inadequado) | Item sem `produtoId` retorna "Produto undefined não encontrado." | Baixa |
 | [BUG-04](docs/04-bugs.md#bug-04--checkout-aceita-nome-sem-letras-e-e-mail-com-pontos-consecutivos) | Checkout aceita nome sem letras e e-mail com pontos consecutivos | Baixa |
 
+## Tecnologias usadas
+
+| Tecnologia | Versão | Uso |
+|---|---|---|
+| [Playwright Test](https://playwright.dev/) | 1.49.1 | Automação dos testes de interface e de API |
+| [TypeScript](https://www.typescriptlang.org/) | 5.7.2 | Linguagem dos scripts de teste |
+| [Node.js](https://nodejs.org/) | 18 ou superior (20 no CI) | Ambiente de execução da automação |
+| Google Chrome / Chromium | Chromium do Playwright ou Chrome instalado (`PW_CHANNEL`) | Navegador dos testes de interface |
+| [Postman](https://www.postman.com/) | 12 (collection v2.1) | Execução manual dos testes de API e reprodução dos bugs |
+| [Newman](https://github.com/postmanlabs/newman) | via `npx` | Execução da collection do Postman pelo terminal |
+| Gherkin | — | Escrita dos casos de teste (`.feature`, em português) |
+| [GitHub Actions](https://github.com/features/actions) | — | Execução da suíte a cada push, com o relatório guardado como artefato |
+| Markdown | — | Documentação de QA |
+
+Padrões adotados na automação: Page Objects, massa de dados em fixtures, cálculo esperado em centavos e seletores por papel e rótulo acessível. Detalhes em [Decisões](#decisões).
+
 ## Uso de IA
 
 Usei IA como apoio em três frentes. Em todas elas o conteúdo gerado foi revisado e ajustado por mim.
